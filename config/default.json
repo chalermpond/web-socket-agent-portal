@@ -1,0 +1,9 @@
+{
+  "messageDb": {
+    "servers": "localhost",
+    "port": 5432,
+    "dbName": "agentportal",
+    "user": "postgres",
+    "password": "mysecretpassword"
+  }
+}

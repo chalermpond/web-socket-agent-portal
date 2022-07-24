@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<div id="messages">
+
+</div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready( () => {
+
+        const messageDiv = $('#messages');
+        const writeMessage = (msg) => {
+            const newComponent = document.createElement('pre');
+            newComponent.innerHTML= msg
+            messageDiv.append(newComponent)
+        };
+        $.ajax({
+            url: "http://localhost:3000/",
+            type: "GET",
+            crossDomain: true,
+            dataType: "json",
+            success: (response) => {
+                writeMessage(JSON.stringify(response))
+            },
+        });
+
+        const socket = io('http://localhost:3000');
+        socket.on('connect', function (resp) {
+            console.log('Connected ', resp);
+        });
+        socket.on('broadcast', function (data) {
+            console.log('message recv ', data)
+            writeMessage('recv: '+JSON.stringify(data))
+        });
+        socket.on('exception', function (data) {
+            console.log('event', data);
+        });
+        socket.on('disconnect', function () {
+            console.log('Disconnected');
+        });
+    })
+</script>
+</html>
